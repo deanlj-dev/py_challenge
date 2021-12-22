@@ -4,8 +4,8 @@
 # if not folder is given prompt to run against the current directory
 
 # Author: Dean Layton-James
-# Date Created: 2021-12-27
-# Last Update: 2021-12-27
+# Date Created: 2021-12-22
+# Last Update: 2021-12-22
 # Code Style: PEP 8
 
 # Import required packages
