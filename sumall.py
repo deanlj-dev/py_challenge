@@ -9,9 +9,11 @@
 # Code Style: PEP 8
 
 # Import required packages
+import glob
+import json
 import os
 import sys
-import glob
+import unicodedata
 from pathlib import Path
 
 
@@ -91,19 +93,50 @@ def process_file(file_name):
 
             # end of file is reached so return our value
             if not line:
+                file_handle.close()
                 print('\rProcessed ' + str(line_count) + ' data objects')
-                return file_total
+                break
 
+            # parse the data object to extract the seqlen value
             file_total += get_line_total(line.strip())
-
-        file_handle.close()
 
     except Exception as ex:
         print(ex)
 
+    # Make sure we clean up file handles and return a value even if it's zero
+    finally:
+        file_handle.close()
+        print('file total is ' + str(file_total))
+        return file_total
+
+
 def get_line_total(line):
-    # print(line)
-    return 1
+    line_dict = json.loads(line)
+
+    if not "seqlen" in line_dict:
+        return 0
+
+    if is_number(line_dict['seqlen']):
+        return float(line_dict['seqlen'])
+
+    return 0
+
+# from https://www.pythoncentral.io/how-to-check-if-a-string-is-a-number-in-python-including-unicode/
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+
+    return False
+
 
 def script_error(msg):
     """General Catch Al exception handler
