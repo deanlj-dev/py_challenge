@@ -10,6 +10,7 @@
 
 # Import required packages
 import glob
+import locale
 import json
 import os
 import sys
@@ -69,10 +70,15 @@ def process_files(data_path):
     print(f'Data directory is ' + (data_path) + '...')
 
     files = glob.glob(data_path + '*.data.json')
+    running_total = 0
 
+    # TODO - check for number of files and print message if none are found
     for file in files:
-        process_file(file)
+        running_total += process_file(file)
 
+    # with the help of https://stackoverflow.com/questions/16670125/python-format-string-thousand-separator-with-spaces
+    locale.setlocale(locale.LC_ALL, '')
+    print("Total of seqlen across all files is {:,.2f}".format(running_total))
 
 def process_file(file_name):
     """Process a data file to extract the seqlen total for the file
@@ -114,11 +120,15 @@ def get_line_total(line):
     line_dict = json.loads(line)
 
     if not "seqlen" in line_dict:
+        # TODO - clarify if we should bail or continue processing
+        print(f'seqlen field not found in data object : ' + str(line_dict['seqlen']))
         return 0
 
     if is_number(line_dict['seqlen']):
         return float(line_dict['seqlen'])
 
+    # TODO - clarify if we should bail or continue processing or maybe ignore the whole file
+    print(f'Invalid value found : ' + str(line_dict['seqlen']))
     return 0
 
 # from https://www.pythoncentral.io/how-to-check-if-a-string-is-a-number-in-python-including-unicode/
