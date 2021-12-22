@@ -127,18 +127,26 @@ def get_line_total(line):
     if is_number(line_dict['seqlen']):
         return float(line_dict['seqlen'])
 
+    if is_unicode_number(line_dict['seqlen']):
+        return unicodedata.numeric(line_dict['seqlen'])
+
     # TODO - clarify if we should bail or continue processing or maybe ignore the whole file
     print(f'Invalid value found : ' + str(line_dict['seqlen']))
     return 0
 
 # from https://www.pythoncentral.io/how-to-check-if-a-string-is-a-number-in-python-including-unicode/
 def is_number(s):
+    """Check if a given value is a number and return a True or False response to the question"""
     try:
         float(s)
         return True
     except ValueError:
         pass
 
+    return False
+
+def is_unicode_number(s):
+    """Check if a given value is a unicode number and return a True or False response to the question"""
     try:
         unicodedata.numeric(s)
         return True
