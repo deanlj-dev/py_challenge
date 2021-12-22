@@ -73,8 +73,37 @@ def process_files(data_path):
 
 
 def process_file(file_name):
+    """Process a data file to extract the seqlen total for the file
+     """
     print(f'Processing ' + file_name)
 
+    try:
+        file_handle = open(file_name, 'r')
+        line_count = 0
+        file_total = 0
+
+        while True:
+            line_count += 1
+            # print(f'\rProcessing data object ' + str(line_count))
+
+            # Get next line from file
+            line = file_handle.readline()
+
+            # end of file is reached so return our value
+            if not line:
+                print('\rProcessed ' + str(line_count) + ' data objects')
+                return file_total
+
+            file_total += get_line_total(line.strip())
+
+        file_handle.close()
+
+    except Exception as ex:
+        print(ex)
+
+def get_line_total(line):
+    # print(line)
+    return 1
 
 def script_error(msg):
     """General Catch Al exception handler
