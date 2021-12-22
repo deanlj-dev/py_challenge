@@ -33,6 +33,18 @@ class TestSumall(unittest.TestCase):
     def test_check_path_folder_does_not_exist(self):
         self.assertRaises(Exception, sumall.check_data_path, '/tmp10')
 
+    def test_is_number(self):
+        self.assertTrue(sumall.is_number('1'))
+
+    def test_is_not_number(self):
+        self.assertFalse(sumall.is_number('a'))
+
+    def test_is_unicode_number(self):
+        self.assertTrue(sumall.is_unicode_number('⅓'))
+
+    def test_is_not_unicode_number(self):
+        self.assertFalse(sumall.is_unicode_number('⅓a'))
+
 
 
 if __name__ == '__main__':
