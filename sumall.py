@@ -54,9 +54,15 @@ def get_data_path():
     if len(sys.argv) != 2:
         usage()
 
-    file_path = Path(sys.argv[1])
+    return check_data_path(sys.argv[1])
+
+
+def check_data_path(argv_path):
+    """Given a path/folder/directory from the command line, check that it is valid and exists
+    """
+    file_path = Path(argv_path)
     if not file_path.is_dir():
-        raise Exception('The folder ' + sys.argv[1] + ' does not exist')
+        raise Exception('The folder ' + argv_path + ' does not exist')
 
     # Make sure out path has the OS compatible trailing slash
     return str(os.path.join(str(file_path), ''))
